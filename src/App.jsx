@@ -1,8 +1,14 @@
 import React from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Signin from './pages/Signin'
 
 const App = () => {
   return (
-    <div className='text-3xl'>App</div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signin" element={<Signin />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
