@@ -1,7 +1,56 @@
-import React from 'react'
+import React, { use, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+
 
 
 const Signin = () => {
+    const [id, setId] = useState(""); // 아이디를 저장하는 변수
+    const [password, setPassword] = useState(""); // 비밀번호를 저장하는 변수
+
+    const [idVaild, setIdVaild] = useState(false); // 아이디 유효성 검사
+    const [passwordVaild, setPasswordVaild] = useState(false); // 비밀번호 유효성 검사
+    const [allow, setAllow] = useState(false); // form 비활성화 여부 저장 변수
+   const [hide, setHide] = useState(true); // 비밀번호 숨김 / 나타나게 -> true = 숨김
+
+    const handleId = (e) => {
+        setId(e.taget.value);
+        const regex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
+        if (regex.test(e.target.value)) {
+            setIdVaild(true);
+        }else{
+            setIdVaild(false);
+        }
+    };
+
+    const handlePassword = (e) => {
+        setPassword(e.target.value);
+        const regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,20}$/; // 비밀번호 정규식
+        if (regex.test(e.target.value)) {
+            setPasswordVaild(true); // 유효성 검사 통과
+        }else{
+            setPasswordVaild(false); // 유효성 검사 실패
+        }
+    };
+
+    const onClickSubmit = (e) => {
+        e.preventDefault();
+        if (idVaild && passwordVaild) {
+            alert("로그인 성공");
+        }else{
+            alert("로그인 실패");
+        }
+    }
+
+  useEffect(() => {
+    if (idVaild && passwordVaild) {
+        setAllow(true);
+    } else {
+        setAllow(false);
+    }
+}, [idVaild, passwordVaild]);
+
+
   return (
     <>
     <div className='flex flex-col min-h-screen font-pretendard items-center justify-center gap-10'>
@@ -10,18 +59,35 @@ const Signin = () => {
         <form className='flex flex-col gap-5'>
             <div className='flex flex-col gap-3'>
                 <span className='text-xl font-semibold'>아이디</span>
-                <input className='border rounded-[10px] pl-3 py-2 w-90 border-[#A3A3A3]' placeholder ="아이디를 입력하세요"/>
+                <input className='border rounded-[10px] pl-3 py-3 w-90 border-[#A3A3A3]' placeholder ="아이디를 입력하세요"/>
             </div>
 
             <div className='flex flex-col gap-3'>
                 <span className='text-xl font-semibold'>비밀번호</span>
-                <input className='border rounded-[10px] pl-3 py-2 w-90 border-[#A3A3A3]' placeholder="비밀번호를 입력하세요" type="password"/>
-            </div>
+                  <div className="relative">
+            <input
+            className='border rounded-[10px] pl-3 pr-10 py-3 w-90 border-[#A3A3A3]'
+            placeholder="비밀번호를 입력하세요"
+            type={hide ? "password" : "text"}
+            value={password}
+            onChange={handlePassword}
+            />
 
+            <button
+            type="button"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-xl text-gray-500"
+            onClick={() => setHide(!hide)}
+            >
+            {hide ? <AiFillEyeInvisible /> : <AiFillEye />}
+            </button>
+            </div>
+            </div>
             <button className='border border-[#87C1FF] 
-            bg-[#87C1FF] py-2 rounded-[10px] text-white
+            bg-[#87C1FF] py-3 rounded-[10px] text-white
             ' type="submit">로그인</button>
         </form>
+
+        <Link className="text-[#D9D9D9] underline underline-offset-4" to="/signup">회원가입</Link>
     </div>
 
     </>
