@@ -75,7 +75,7 @@ const onClickSubmit = async (e) => {
             <div className='flex flex-col gap-3'>
                 <span className='text-xl font-semibold'>아이디</span>
                 <input
-                className='border rounded-[10px] pl-3 py-3 w-90 border-[#A3A3A3]'
+                className='border rounded-[10px] pl-3 py-3 w-90 border-[#A3A3A3] focus:outline-none focus:ring-0 focus:shadow-none'
                 placeholder="아이디를 입력하세요"
                 value={id}
                 onChange={handleId}
@@ -86,7 +86,7 @@ const onClickSubmit = async (e) => {
                 <span className='text-xl font-semibold'>비밀번호</span>
                   <div className="relative">
             <input
-            className='border rounded-[10px] pl-3 pr-10 py-3 w-90 border-[#A3A3A3]'
+            className='border rounded-[10px] pl-3 pr-10 py-3 w-90 border-[#A3A3A3] focus:outline-none focus:ring-0 focus:shadow-none'
             placeholder="비밀번호를 입력하세요"
             type={hide ? "password" : "text"}
             value={password}
@@ -103,7 +103,7 @@ const onClickSubmit = async (e) => {
             </div>
             </div>
             <button className='border border-[#87C1FF] 
-            bg-[#87C1FF] py-3 rounded-[10px] text-white
+            bg-[#87C1FF] py-3 rounded-[10px] text-white 
             ' type="submit">로그인</button>
         </form>
 
