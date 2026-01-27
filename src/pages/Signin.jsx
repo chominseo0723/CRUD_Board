@@ -1,10 +1,11 @@
-import React, { use, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-
+import LoginApi from '../apis/LoginApi';
 
 
 const Signin = () => {
+    const navigate = useNavigate();
     const [id, setId] = useState(""); // 아이디를 저장하는 변수
     const [password, setPassword] = useState(""); // 비밀번호를 저장하는 변수
 
@@ -14,8 +15,8 @@ const Signin = () => {
    const [hide, setHide] = useState(true); // 비밀번호 숨김 / 나타나게 -> true = 숨김
 
     const handleId = (e) => {
-        setId(e.taget.value);
-        const regex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
+        setId(e.target.value);
+       const regex = /^[a-z0-9]{4,20}$/;
         if (regex.test(e.target.value)) {
             setIdVaild(true);
         }else{
@@ -33,14 +34,28 @@ const Signin = () => {
         }
     };
 
-    const onClickSubmit = (e) => {
-        e.preventDefault();
-        if (idVaild && passwordVaild) {
-            alert("로그인 성공");
-        }else{
-            alert("로그인 실패");
-        }
-    }
+const onClickSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!idVaild || !passwordVaild) {
+    alert('아이디 또는 비밀번호 형식을 확인하세요');
+    return;
+  }
+
+  try {
+    const data = await LoginApi({
+      username: id,
+      password,
+    });
+
+    console.log(data);
+    alert('로그인 성공');
+    navigate('/');
+  } catch (err) {
+    alert(err.response?.data?.message || '로그인 실패');
+  }
+};
+
 
   useEffect(() => {
     if (idVaild && passwordVaild) {
@@ -56,10 +71,15 @@ const Signin = () => {
     <div className='flex flex-col min-h-screen font-pretendard items-center justify-center gap-10'>
         <span className='text-3xl font-semibold'>로그인</span>
 
-        <form className='flex flex-col gap-5'>
+        <form className='flex flex-col gap-5 ' onSubmit={onClickSubmit}>
             <div className='flex flex-col gap-3'>
                 <span className='text-xl font-semibold'>아이디</span>
-                <input className='border rounded-[10px] pl-3 py-3 w-90 border-[#A3A3A3]' placeholder ="아이디를 입력하세요"/>
+                <input
+                className='border rounded-[10px] pl-3 py-3 w-90 border-[#A3A3A3]'
+                placeholder="아이디를 입력하세요"
+                value={id}
+                onChange={handleId}
+                />
             </div>
 
             <div className='flex flex-col gap-3'>
