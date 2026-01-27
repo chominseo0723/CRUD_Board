@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import CheckUsernameApi from '../apis/CheckUsernameApi';
 import CheckNicknameApi from '../apis/CheckNicknameApi';
 import api from '../apis/api';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const Signup = () => {
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [nickname, setNickname] = useState('');
@@ -106,6 +108,7 @@ const handleSignup = async () => {
 
     alert('회원가입 성공');
     console.log(res.data);
+    navigate('/signin');
   } catch (err) {
     alert('회원가입 실패');
     console.error(err);
