@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import LoginApi from '../apis/LoginApi';
-
+import useAuth from '../contexts/useAuth';
 
 const Signin = () => {
     const navigate = useNavigate();
     const [id, setId] = useState(""); // 아이디를 저장하는 변수
     const [password, setPassword] = useState(""); // 비밀번호를 저장하는 변수
+
+    const { login } = useAuth();
 
     const [idVaild, setIdVaild] = useState(false); // 아이디 유효성 검사
     const [passwordVaild, setPasswordVaild] = useState(false); // 비밀번호 유효성 검사
@@ -47,6 +49,8 @@ const onClickSubmit = async (e) => {
       username: id,
       password,
     });
+
+    login(data.accessToken);
 
     console.log(data);
     alert('로그인 성공');
