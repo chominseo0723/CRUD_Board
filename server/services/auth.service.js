@@ -134,3 +134,19 @@ exports.login = ({ username, password }) => {
     });
   });
 };
+
+exports.getMyNickname = (userId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT nickname FROM users WHERE id = ?';
+
+    db.query(sql, [userId], (err, results) => {
+      if (err) return reject({ message: '서버 에러' });
+
+      if (results.length === 0) {
+        return reject({ status: 404, message: '사용자를 찾을 수 없습니다' });
+      }
+
+      resolve({ nickname: results[0].nickname });
+    });
+  });
+};

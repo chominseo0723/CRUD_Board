@@ -53,3 +53,15 @@ exports.login = async (req, res) => {
   }
 };
 
+// 닉네임 
+exports.getMe = async (req, res) => {
+  try {
+    const userId = req.user.id; // JWT에서 꺼냄
+    const result = await authService.getMyNickname(userId);
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
