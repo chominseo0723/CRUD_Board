@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 import headerlogo from '../assets/HeaderLogo.png'
 import { CiSearch } from "react-icons/ci";
 import { Link } from 'react-router-dom';
+import useAuth from '../contexts/useAuth';
 
 const BoardHeader = () => {
+
+  const { accessToken } = useAuth()
+  const isLoggedIn = !!accessToken
+
   return (
     <>
     <div className='flex flex-row bg-[#CBE4FF] items-center font-pretendard'>
@@ -17,8 +22,29 @@ const BoardHeader = () => {
             <button type='button' className='pr-4'><CiSearch className='text-[#A3A3A3]' size={25}/></button>
         </div>
 
-        {/* 로그인 X -> 로그인 link */}
-        <Link className='ml-auto mr-10 text-xl font-semibold text-[#A3A3A3]' to="/signin">로그인</Link>
+        {/* 우측 영역 */}
+      <div className="ml-auto mr-20">
+        {!isLoggedIn ? (
+          /* 로그인 X */
+          <Link
+            className='text-xl font-semibold text-[#A3A3A3]'
+            to="/signin"
+          >
+            로그인
+          </Link>
+        ) : (
+          /* 로그인 O */
+          <div className="flex items-center gap-5">
+            <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm">
+               {/* 사용자 프로필 API 연동전 기본이미지  */}
+            </div>
+            <span className="text-lg text-gray-500">
+              닉네임
+            </span>
+          </div>
+        )}
+      </div>
+       
     </div>
     </>
   )
