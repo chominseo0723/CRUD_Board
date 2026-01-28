@@ -25,3 +25,4 @@ dist-ssr
 
 # server DB config
 server/db.js
+server/.env

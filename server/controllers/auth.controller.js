@@ -40,12 +40,26 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await authService.login({ username, password });
+    const result = await authService.login({ username, password });
 
     res.json({
       message: '로그인 성공',
-      user,
+      accessToken: result.accessToken,
+      user: result.user,
     });
+  } catch (err) {
+    console.error(err);
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+// 닉네임 
+exports.getMe = async (req, res) => {
+  try {
+    const userId = req.user.id; // JWT에서 꺼냄
+    const result = await authService.getMyNickname(userId);
+
+    res.json(result);
   } catch (err) {
     console.error(err);
     res.status(err.status || 500).json({ message: err.message });

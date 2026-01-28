@@ -1,5 +1,6 @@
 const db = require('../db');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // 아이디 형식
 const usernameRegex = /^[a-z0-9]{4,20}$/;
@@ -109,11 +110,43 @@ exports.login = ({ username, password }) => {
         });
       }
 
+      console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
+
+      // JWT 생성
+      const accessToken = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+
       resolve({
-        id: user.id,
-        username: user.username,
-        nickname: user.nickname,
+        accessToken,
+        user: {
+          id: user.id,
+          username: user.username,
+          nickname: user.nickname,
+        },
       });
+    });
+  });
+};
+
+exports.getMyNickname = (userId) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT nickname FROM users WHERE id = ?';
+
+    db.query(sql, [userId], (err, results) => {
+      if (err) return reject({ message: '서버 에러' });
+
+      if (results.length === 0) {
+        return reject({ status: 404, message: '사용자를 찾을 수 없습니다' });
+      }
+
+      resolve({ nickname: results[0].nickname });
     });
   });
 };
