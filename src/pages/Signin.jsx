@@ -51,7 +51,8 @@ const onClickSubmit = async (e) => {
     });
 
     login(data.accessToken);
-
+    localStorage.setItem('accessToken', data.accessToken);
+    
     console.log(data);
     alert('로그인 성공');
     navigate('/');

@@ -1,13 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import headerlogo from '../assets/HeaderLogo.png'
 import { CiSearch } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 import useAuth from '../contexts/useAuth';
+import UserApi from '../apis/UserApi';
 
 const BoardHeader = () => {
 
   const { accessToken } = useAuth()
   const isLoggedIn = !!accessToken
+
+  const [nickname, setNickname] = useState(null)
+
+  // 닉네임 조회 
+   useEffect(() => {
+    if (!accessToken) return;
+
+    const fetchNickname = async () => {
+      try {
+        const data = await UserApi(accessToken);
+        setNickname(data.nickname);
+      } catch (error) {
+        console.error('닉네임 조회 실패', error);
+      }
+    };
+
+    fetchNickname();
+  }, [accessToken]);
 
   return (
     <>
@@ -39,7 +58,7 @@ const BoardHeader = () => {
                {/* 사용자 프로필 API 연동전 기본이미지  */}
             </div>
             <span className="text-lg text-gray-500">
-              닉네임
+              { nickname ? nickname : '닉네임' }
             </span>
           </div>
         )}
